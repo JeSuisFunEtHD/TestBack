@@ -1,4 +1,4 @@
-package com.example.authdemo.model;
+package com.example.demo.model;
 
 public class User {
     private int id;

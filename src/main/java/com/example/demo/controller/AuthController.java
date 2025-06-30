@@ -1,7 +1,7 @@
-package com.example.authdemo.controller;
+package com.example.demo.controller;
 
-import com.example.authdemo.model.User;
-import com.example.authdemo.service.AuthService;
+import com.example.demo.model.User;
+import com.example.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
