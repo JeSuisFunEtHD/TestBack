@@ -9,8 +9,17 @@
         <input type="text" name="username" placeholder="Логин" required><br>
         <input type="password" name="password" placeholder="Пароль" required><br>
         <button type="submit">Войти</button>
+        <button onclick="window.location.href='/index.html'">Назад</button>
     </form>
+    <script type="module">
+        import { getSessionState } from './js/session.js';
 
+        getSessionState().then(({ authorized, hasInfo }) => {
+            if (authorized) {
+        location.href = hasInfo ? "/profile.html" : "/fill.html";
+                            }
+        });
+    </script>
     <script>
         const form = document.getElementById("login-form");
         form.addEventListener("submit", async (e) => {
@@ -25,11 +34,13 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                 credentials: "include"
             });
 
-            const msg = await res.text();
-            alert(msg);
+            if (res.ok) {
+    location.reload();
+}
         });
     </script>
 </body>

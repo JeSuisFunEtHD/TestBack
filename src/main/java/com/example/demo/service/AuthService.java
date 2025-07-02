@@ -16,7 +16,9 @@ public class AuthService {
         userRepository.save(user);
         return true;
     }
-
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
     public boolean authenticate(User user) {
         User existing = userRepository.findByUsername(user.getUsername());
         return existing != null && existing.getPassword().equals(user.getPassword());

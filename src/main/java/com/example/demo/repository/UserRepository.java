@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import com.example.demo.model.UserInfo;
 
 @Repository
 public class UserRepository {
@@ -23,4 +24,5 @@ public class UserRepository {
                 new BeanPropertyRowMapper<>(User.class), username);
         return users.isEmpty() ? null : users.get(0);
     }
+
 }

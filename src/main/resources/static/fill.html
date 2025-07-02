@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Заполните информацию о себе</h2>
+<form id="info-form">
+    <input type="text" name="name" placeholder="Имя" required><br>
+    <input type="text" name="lastname" placeholder="Фамилия" required><br>
+    <input type="number" name="age" min="18" placeholder="Возраст"><br>
+    <input type="text" name="city" placeholder="Город" required><br>
+    <button type="submit">Готово</button>
+    <button  id="logout-button">Выйти из аккаунта</button>
+</form>
+<script>
+    document.getElementById("logout-button").addEventListener("click", async () => {
+    await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include"
+    });
+
+    window.location.href = "/index.html";
+});
+</script>
+<script type="module">
+    import { getSessionState } from './js/session.js';
+
+    getSessionState().then(({ authorized, hasInfo }) => {
+        if (!authorized) {
+    location.href = "/index.html";
+                        }
+    });
+</script>
+<script>
+    const form = document.getElementById("info-form");
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = {
+            fullName: form.name.value,
+            lastName: form.lastname.value,
+            age: form.age.value,
+            city: form.city.value
+        };
+
+        const res = await fetch("/api/fill", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+             credentials: "include"
+        });
+
+        window.location.href = "/profile.html";
+    });
+</script>
+</body>
+</html>

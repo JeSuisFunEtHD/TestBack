@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Информация</h2>
+<p>Имя: <span id="full-name"></span></p>
+<p>Фамилия: <span id="last-name"></span></p>
+<p>Возраст: <span id="age"></span></p>
+<p>Город: <span id="city"></span></p>
+<button onclick="window.location.href='/fill.html'">Редактировать информацию</button>
+<button id="logout-button">Выйти из аккаунта</button>
+<script>
+    document.getElementById("logout-button").addEventListener("click", async () => {
+    await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include"
+    });
+
+    window.location.href = "/index.html";
+});
+    </script>
+<script type="module">
+    import { getSessionState } from './js/session.js';
+
+    getSessionState().then(({ authorized, hasInfo }) => {
+        if (!authorized) {
+    location.href = "/index.html";
+                        }
+    });
+</script>
+<script>
+    async function loadProfile() {
+        const res = await fetch("/api/profile", {
+            method: "GET",
+            credentials: "include"
+        });
+
+        const data = await res.json();
+
+        document.getElementById("full-name").innerText = data.fullName;
+        document.getElementById("age").innerText = data.age;
+        document.getElementById("city").innerText = data.city;
+        document.getElementById("last-name").innerText = data.lastName;
+    }
+
+    loadProfile();
+</script>
+</body>
+</html>
