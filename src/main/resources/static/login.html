@@ -1,47 +1,48 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Авторизация</title>
-</head>
-<body>
-    <h2>Авторизация</h2>
-    <form id="login-form">
-        <input type="text" name="username" placeholder="Логин" required><br>
-        <input type="password" name="password" placeholder="Пароль" required><br>
-        <button type="submit">Войти</button>
-        <button onclick="window.location.href='/index.html'">Назад</button>
-    </form>
-    <script type="module">
-        import { getSessionState } from './js/session.js';
-
-        getSessionState().then(({ authorized, hasInfo }) => {
-            if (authorized) {
-        location.href = hasInfo ? "/profile.html" : "/fill.html";
-                            }
-        });
-    </script>
+    <title>Login</title>
     <script>
-        const form = document.getElementById("login-form");
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const data = {
-                username: form.username.value,
-                password: form.password.value
-            };
+        function handleLogin(event) {
+            event.preventDefault();
 
-            const res = await fetch("/api/login", {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            fetch("/auth/login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: JSON.stringify(data),
-                 credentials: "include"
+                body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Успешная авторизация!");
+                } else {
+                    alert("Неверный email или пароль");
+                }
+            })
+            .catch(error => {
+                alert("Ошибка при отправке запроса");
+                console.error(error);
             });
-
-            if (res.ok) {
-    location.reload();
-}
-        });
+        }
     </script>
+</head>
+<body>
+<h1>Авторизация</h1>
+
+<form onsubmit="handleLogin(event)">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+    <br><br>
+
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password" required />
+    <br><br>
+
+    <button type="submit">Войти</button>
+</form>
 </body>
 </html>

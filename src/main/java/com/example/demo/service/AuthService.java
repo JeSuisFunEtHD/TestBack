@@ -2,25 +2,24 @@ package com.example.demo.service;
 
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public AuthService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-    public boolean register(User user) {
-        if (userRepository.findByUsername(user.getUsername()) != null) return false;
-        userRepository.save(user);
-        return true;
-    }
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-    public boolean authenticate(User user) {
-        User existing = userRepository.findByUsername(user.getUsername());
-        return existing != null && existing.getPassword().equals(user.getPassword());
+    /**
+     * Проверка email + пароля. Возвращает Optional<User>, если авторизация успешна.
+     */
+    public boolean authenticate(String email, String password) {
+        return userRepository.findByEmail(email)
+                .map(user -> user.getPassword().equals(password))
+                .orElse(false);
     }
 }
